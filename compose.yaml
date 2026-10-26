@@ -1,6 +1,6 @@
 services:
   minecraft:
-    image: itzg/minecraft-server:java21
+    image: itzg/minecraft-server:java25
     container_name: szydlowski-survival
     restart: unless-stopped
     ports:
@@ -8,7 +8,7 @@ services:
     environment:
       EULA: ${EULA:-FALSE}
       TYPE: PAPER
-      VERSION: ${MINECRAFT_VERSION:-1.21.11}
+      VERSION: ${MINECRAFT_VERSION:-26.1.2}
       MEMORY: ${MEMORY:-4G}
       MODE: survival
       DIFFICULTY: normal

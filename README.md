@@ -51,7 +51,8 @@ trwałego, który pozostaje dostępny dla nowego hosta. W razie potrzeby ustaw
 
 ## Funkcje
 
-Przy pierwszym uruchomieniu pobierane są przypięte wersje pluginów:
+Obraz serwera używa Java 25. Przy pierwszym uruchomieniu pobierane są
+przypięte wersje pluginów:
 
 - EssentialsX — ekonomia, saldo i przelewy (`/bal`, `/pay`).
 - VaultUnlocked — łączy ekonomię z pluginami sklepowymi i pracami.
@@ -67,5 +68,6 @@ oraz sprzedaż, a następnie nadaj właścicielowi uprawnienia administratora.
 Nie udostępniaj publicznie dostępu do konsoli ani RCON.
 
 Pluginy i świat są przechowywane w trwałym wolumenie `/data`. Przed aktualizacją
-serwera lub pluginów wykonaj kopię zapasową tego wolumenu. Wersja Minecrafta
-jest ustawiona na 1.21.11, a pluginy dobrano do tej wersji.
+serwera lub pluginów wykonaj kopię zapasową tego wolumenu. Projekt jest
+ustawiony na Minecraft 26.1.2, najnowszą wspólną wersję obsługiwaną przez
+obecnie przypięte pluginy. Nowsza wersja gry może wymagać aktualizacji pluginów.
