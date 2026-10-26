@@ -1,0 +1,13 @@
+{
+  "file": "${CFG_CLAIM_CONFIG_FILE}",
+  "ops": [
+    {
+      "$put": {
+        "path": "$.GriefPrevention.Economy",
+        "key": "ClaimBlocksPurchaseCost",
+        "value": "${CFG_CLAIM_BLOCK_PRICE}",
+        "value-type": "float"
+      }
+    }
+  ]
+}

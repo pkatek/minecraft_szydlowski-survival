@@ -18,6 +18,7 @@ services:
       VERSION: ${MINECRAFT_VERSION:-26.1.2}
       MEMORY: ${MEMORY:-4G}
       INIT_MEMORY: ${INIT_MEMORY:-1G}
+      CFG_CLAIM_BLOCK_PRICE: ${CFG_CLAIM_BLOCK_PRICE:-10.0}
       MODE: survival
       DIFFICULTY: normal
       MOTD: "Szydłowski Survival | Survival z ekonomią i handlem"
