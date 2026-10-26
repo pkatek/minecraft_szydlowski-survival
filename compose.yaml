@@ -1,0 +1,33 @@
+services:
+  minecraft:
+    image: itzg/minecraft-server:java21
+    container_name: szydlowski-survival
+    restart: unless-stopped
+    ports:
+      - "25565:25565"
+    environment:
+      EULA: ${EULA:-FALSE}
+      TYPE: PAPER
+      VERSION: ${MINECRAFT_VERSION:-1.21.11}
+      MEMORY: ${MEMORY:-4G}
+      MODE: survival
+      DIFFICULTY: normal
+      MOTD: "Szydłowski Survival | Survival z ekonomią i handlem"
+      ONLINE_MODE: "TRUE"
+      VIEW_DISTANCE: 8
+      SIMULATION_DISTANCE: 6
+      ENABLE_RCON: "FALSE"
+      PLUGINS: |
+        https://cdn.modrinth.com/data/hXiIvTyT/versions/nY6VN1XH/EssentialsX-2.22.0.jar
+        https://cdn.modrinth.com/data/ayRaM8J7/versions/qZgRzoYs/VaultUnlocked-2.20.3.jar
+        https://cdn.modrinth.com/data/Vebnzrzj/versions/b0mk8uS6/LuckPerms-Bukkit-5.5.71.jar
+        https://cdn.modrinth.com/data/O4o4mKaq/versions/dGfCZHqk/GriefPrevention.jar
+        https://cdn.modrinth.com/data/Nb4YI7u5/versions/WMpBeQ9P/VJobs-2.0-RELEASE.jar
+        https://cdn.modrinth.com/data/zR6c1YxT/versions/VqtuqPLJ/EconomyShop-1.1.6.jar
+    volumes:
+      - minecraft-data:/data
+
+volumes:
+  minecraft-data:
+    external: true
+    name: szydlowski-survival-data
