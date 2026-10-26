@@ -6,7 +6,7 @@ on damage of player:
 
 every 15 minutes:
     add 1 to {szydlowski.help.tip}
-    if {szydlowski.help.tip} > 5:
+    if {szydlowski.help.tip} > 6:
         set {szydlowski.help.tip} to 1
 
     if {szydlowski.help.tip} is 1:
@@ -17,5 +17,10 @@ every 15 minutes:
         broadcast "&6[Pomoc] &fOtwórz menu prac komendą &e/vjobs&f. Górnik zarabia na kopaniu!"
     else if {szydlowski.help.tip} is 4:
         broadcast "&6[Pomoc] &fDołącz do pracy Górnika: &e/vjobs join Miner&f."
-    else:
+    else if {szydlowski.help.tip} is 5:
         broadcast "&6[Pomoc] &fSprawdź postęp i zarobki z prac: &e/vjobs stats&f."
+    else:
+        broadcast "&6[Pomoc] &fOtwórz sklep serwerowy komendą &e/shop&f."
+
+every 10 minutes:
+    send action bar "&6Sklep serwerowy: &e/shop" to all players

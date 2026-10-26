@@ -5,7 +5,8 @@ default:
     4: '&a%vault_eco_balance_formatted%'
     3: ''
     2: '&7Prace: &f/vjobs'
-    1: '&7Pomoc: &f/bal'
+    1: '&7Pomoc: &f/help'
+    0: '&7Sklep: &f/shop'
   defaultHideNumber: true
   defaultRenderEvery: 40
   conditions: []

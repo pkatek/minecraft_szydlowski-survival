@@ -56,6 +56,7 @@ przypięte wersje pluginów:
 
 - EssentialsX — ekonomia, saldo i przelewy (`/bal`, `/pay`).
 - PlaceholderAPI i SimpleScore — saldo na panelu po prawej stronie ekranu.
+- EconomyShop — sklep serwerowy dostępny komendą `/shop`.
 - Skript — blokuje PvP wobec gracza, który nie ma pełnego zestawu zbroi.
 - VaultUnlocked — łączy ekonomię z pluginami sklepowymi i pracami.
 - LuckPerms — rangi i uprawnienia.
@@ -76,7 +77,9 @@ SimpleScore z `compose.yaml`, a następnie przebuduj obraz i wdróż usługę
 ponownie. Plik panelu salda również jest kopiowany do katalogu pluginów przy
 starcie.
 
-Skrypt co 15 minut przypomina graczom o komendach salda, płatności i prac.
+Skrypt co 15 minut przypomina graczom o komendach salda, płatności, prac i
+sklepu (`/shop`). Dodatkowo co 10 minut pokazuje wszystkim graczom krótką
+wiadomość na actionbarze: `Sklep serwerowy: /shop`.
 Panel SimpleScore pokazuje saldo przez placeholder Vault. Po pierwszym
 uruchomieniu PlaceholderAPI wpisz w konsoli serwera Cloud66 (nie w terminalu
 systemowym kontenera):
