@@ -3,3 +3,19 @@ on damage of player:
     if victim's helmet is air or victim's chestplate is air or victim's leggings are air or victim's boots are air:
         cancel event
         send "&cPvP jest dostępne dopiero, gdy gracz ma pełną zbroję." to attacker
+
+every 15 minutes:
+    add 1 to {szydlowski.help.tip}
+    if {szydlowski.help.tip} > 5:
+        set {szydlowski.help.tip} to 1
+
+    if {szydlowski.help.tip} is 1:
+        broadcast "&6[Pomoc] &fSprawdź swoje pieniądze komendą &e/bal&f."
+    else if {szydlowski.help.tip} is 2:
+        broadcast "&6[Pomoc] &fPrzelej pieniądze innemu graczowi: &e/pay <nick> <kwota>&f."
+    else if {szydlowski.help.tip} is 3:
+        broadcast "&6[Pomoc] &fOtwórz menu prac komendą &e/vjobs&f. Górnik zarabia na kopaniu!"
+    else if {szydlowski.help.tip} is 4:
+        broadcast "&6[Pomoc] &fDołącz do pracy Górnika: &e/vjobs join Miner&f."
+    else:
+        broadcast "&6[Pomoc] &fSprawdź postęp i zarobki z prac: &e/vjobs stats&f."

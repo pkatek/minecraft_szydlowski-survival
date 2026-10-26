@@ -19,6 +19,8 @@ services:
       ENABLE_RCON: "FALSE"
       PLUGINS: |
         https://cdn.modrinth.com/data/xFNYAvMk/versions/md6XoYzV/Skript-2.17.1.jar
+        https://cdn.modrinth.com/data/lKEzGugV/versions/pIvQcXW8/PlaceholderAPI-2.12.3.jar
+        https://cdn.modrinth.com/data/qG43Afem/versions/g9v62rqb/SimpleScore-4.3.1.jar
         https://cdn.modrinth.com/data/hXiIvTyT/versions/nY6VN1XH/EssentialsX-2.22.0.jar
         https://cdn.modrinth.com/data/ayRaM8J7/versions/qZgRzoYs/VaultUnlocked-2.20.3.jar
         https://cdn.modrinth.com/data/Vebnzrzj/versions/b0mk8uS6/LuckPerms-Bukkit-5.5.71.jar

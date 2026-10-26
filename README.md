@@ -55,6 +55,7 @@ Obraz serwera używa Java 25. Przy pierwszym uruchomieniu pobierane są
 przypięte wersje pluginów:
 
 - EssentialsX — ekonomia, saldo i przelewy (`/bal`, `/pay`).
+- PlaceholderAPI i SimpleScore — saldo na panelu po prawej stronie ekranu.
 - Skript — blokuje PvP wobec gracza, który nie ma pełnego zestawu zbroi.
 - VaultUnlocked — łączy ekonomię z pluginami sklepowymi i pracami.
 - LuckPerms — rangi i uprawnienia.
@@ -68,10 +69,24 @@ graczy, skonfiguruj ceny i wypłaty, przetestuj `/bal`, `/pay`, prace, zakupy
 oraz sprzedaż, a następnie nadaj właścicielowi uprawnienia administratora.
 Nie udostępniaj publicznie dostępu do konsoli ani RCON.
 
-Reguła PvP jest dostarczana w `scripts/full-armor-pvp.sk` i kopiowana do
-`/data/plugins/Skript/scripts` z obrazu przy starcie. W Cloud66 dopisz do
-zmiennej `PLUGINS` także przypięty adres Skript z `compose.yaml`, a następnie
-przebuduj obraz i wdróż usługę ponownie.
+Skrypt PvP i przypomnienia są dostarczane w `scripts/full-armor-pvp.sk` i
+kopiowane do `/data/plugins/Skript/scripts` z obrazu przy starcie. W Cloud66
+dopisz do zmiennej `PLUGINS` przypięte adresy Skript, PlaceholderAPI i
+SimpleScore z `compose.yaml`, a następnie przebuduj obraz i wdróż usługę
+ponownie. Plik panelu salda również jest kopiowany do katalogu pluginów przy
+starcie.
+
+Skrypt co 15 minut przypomina graczom o komendach salda, płatności i prac.
+Panel SimpleScore pokazuje saldo przez placeholder Vault. Po pierwszym
+uruchomieniu PlaceholderAPI wpisz w konsoli serwera Cloud66 (nie w terminalu
+systemowym kontenera):
+
+```text
+papi ecloud download Vault
+papi reload
+```
+
+Po przeładowaniu pluginów panel powinien wyświetlić aktualne saldo gracza.
 
 Pluginy i świat są przechowywane w trwałym wolumenie `/data`. Przed aktualizacją
 serwera lub pluginów wykonaj kopię zapasową tego wolumenu. Projekt jest

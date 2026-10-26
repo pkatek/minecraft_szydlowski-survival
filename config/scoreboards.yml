@@ -1,0 +1,11 @@
+default:
+  titles: '&6&lSzydlowski Survival'
+  scores:
+    5: '&7Twoje saldo'
+    4: '&a%vault_eco_balance_formatted%'
+    3: ''
+    2: '&7Prace: &f/vjobs'
+    1: '&7Pomoc: &f/bal'
+  defaultHideNumber: true
+  defaultRenderEvery: 40
+  conditions: []
