@@ -4,9 +4,90 @@ on damage of player:
         cancel event
         send "&cPvP jest dostępne dopiero, gdy gracz ma pełną zbroję." to attacker
 
+on first join:
+    set {_newPlayer} to player
+    if {_newPlayer} has permission "jobs.limit.18" and {_newPlayer} has permission "jobs.cooldown.instant":
+        wait 1 second
+        set {_jobs::*} to "miner", "farmer", "lumberjack", "hunter", "fisherman", "builder", "digger", "brewer", "enchanter", "weaponsmith", "crafter", "explorer", "cook", "trader", "redstoner", "tamer", "archaeologist", "blacksmith"
+        loop {_jobs::*}:
+            execute {_newPlayer} command "vjobs join %loop-value%"
+        if {_newPlayer} is online:
+            send "&aDołączono Cię automatycznie do wszystkich prac! Wpisz &e/vjobs&a, aby zobaczyć szczegóły." to {_newPlayer}
+    else:
+        send "&cNie można automatycznie dołączyć do prac. Poproś administratora o sprawdzenie uprawnień VJobs." to {_newPlayer}
+
+command /tpa100 <player>:
+    executable by: players
+    trigger:
+        set {_target} to arg-1
+        if {_target} is player:
+            send "&cNie możesz wysłać prośby teleportacji do siebie." to player
+            stop
+        add 1 to {szydlowski.tpa.sequence}
+        set {_requestId} to {szydlowski.tpa.sequence}
+        set {szydlowski.tpa.requester::%uuid of {_target}%} to player
+        set {szydlowski.tpa.requestId::%uuid of {_target}%} to {_requestId}
+        set {szydlowski.tpa.created::%uuid of {_target}%} to now
+        send "&aWysłano prośbę do &e%name of {_target}%&a. Teleport kosztuje 100$ i opłata będzie pobrana tylko po akceptacji." to player
+        send "&e%name of player% &7prosi o teleport do Ciebie za &6100$&7. Wpisz &a/tp100accept &7lub &c/tp100deny&7." to {_target}
+        wait 2 minutes
+        if {szydlowski.tpa.requestId::%uuid of {_target}%} is {_requestId}:
+            delete {szydlowski.tpa.requester::%uuid of {_target}%}
+            delete {szydlowski.tpa.requestId::%uuid of {_target}%}
+            delete {szydlowski.tpa.created::%uuid of {_target}%}
+            if {_target} is online:
+                send "&7Prośba teleportacji od &e%name of player% &7wygasła." to {_target}
+
+command /tp100accept:
+    executable by: players
+    trigger:
+        set {_requestKey} to "%uuid of player%"
+        if {szydlowski.tpa.requester::%{_requestKey}%} is not set:
+            send "&cNie masz żadnej oczekującej prośby teleportacji." to player
+            stop
+        if difference between now and {szydlowski.tpa.created::%{_requestKey}%} is more than 2 minutes:
+            delete {szydlowski.tpa.requester::%{_requestKey}%}
+            delete {szydlowski.tpa.requestId::%{_requestKey}%}
+            delete {szydlowski.tpa.created::%{_requestKey}%}
+            send "&cTa prośba teleportacji wygasła." to player
+            stop
+        set {_requester} to {szydlowski.tpa.requester::%{_requestKey}%}
+        if {_requester} is not online:
+            delete {szydlowski.tpa.requester::%{_requestKey}%}
+            delete {szydlowski.tpa.requestId::%{_requestKey}%}
+            delete {szydlowski.tpa.created::%{_requestKey}%}
+            send "&cGracz, który wysłał prośbę, jest już offline." to player
+            stop
+        if balance of {_requester} is less than 100:
+            send "&c%name of {_requester}% nie ma wystarczających środków (100$)." to player
+            send "&cNie masz wystarczających środków na teleport (100$)." to {_requester}
+            stop
+        remove 100 from {_requester}'s balance
+        teleport {_requester} to player
+        send "&aTeleportowano Cię do &e%name of player%&a. Pobrano 100$." to {_requester}
+        send "&a%name of {_requester}% teleportował się do Ciebie; pobrano 100$." to player
+        delete {szydlowski.tpa.requester::%{_requestKey}%}
+        delete {szydlowski.tpa.requestId::%{_requestKey}%}
+        delete {szydlowski.tpa.created::%{_requestKey}%}
+
+command /tp100deny:
+    executable by: players
+    trigger:
+        set {_requestKey} to "%uuid of player%"
+        if {szydlowski.tpa.requester::%{_requestKey}%} is not set:
+            send "&cNie masz żadnej oczekującej prośby teleportacji." to player
+            stop
+        set {_requester} to {szydlowski.tpa.requester::%{_requestKey}%}
+        delete {szydlowski.tpa.requester::%{_requestKey}%}
+        delete {szydlowski.tpa.requestId::%{_requestKey}%}
+        delete {szydlowski.tpa.created::%{_requestKey}%}
+        send "&7Odrzuciłeś prośbę teleportacji." to player
+        if {_requester} is online:
+            send "&c%name of player% odrzucił(a) Twoją prośbę teleportacji." to {_requester}
+
 every 15 minutes:
     add 1 to {szydlowski.help.tip}
-    if {szydlowski.help.tip} > 6:
+    if {szydlowski.help.tip} > 7:
         set {szydlowski.help.tip} to 1
 
     if {szydlowski.help.tip} is 1:
@@ -16,11 +97,13 @@ every 15 minutes:
     else if {szydlowski.help.tip} is 3:
         broadcast "&6[Pomoc] &fOtwórz menu prac komendą &e/vjobs&f. Górnik zarabia na kopaniu!"
     else if {szydlowski.help.tip} is 4:
-        broadcast "&6[Pomoc] &fDołącz do pracy Górnika: &e/vjobs join Miner&f."
+        broadcast "&6[Pomoc] &fKopanie rozwija Miner, a ścinanie drzew Woodcutter. Zobacz &e/vjobs&f."
     else if {szydlowski.help.tip} is 5:
         broadcast "&6[Pomoc] &fSprawdź postęp i zarobki z prac: &e/vjobs stats&f."
-    else:
+    else if {szydlowski.help.tip} is 6:
         broadcast "&6[Pomoc] &fOtwórz sklep serwerowy komendą &e/shop&f."
+    else:
+        broadcast "&6[Pomoc] &fPoproś o teleport za 100$: &e/tpa100 <nick>&f. Akceptacja: &e/tp100accept&f."
 
 every 10 minutes:
     send action bar "&6Sklep serwerowy: &e/shop" to all players

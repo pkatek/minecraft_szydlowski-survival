@@ -1,8 +1,8 @@
 default:
-  titles: '&6&lSzydlowski Survival'
+  titles: '&6&lSurvival'
   scores:
     5: '&7Twoje saldo'
-    4: '&a%vault_eco_balance_formatted%'
+    4: '&a%vault_eco_balance_formatted%$'
     3: ''
     2: '&7Prace: &f/vjobs'
     1: '&7Pomoc: &f/help'

@@ -78,8 +78,23 @@ ponownie. Plik panelu salda również jest kopiowany do katalogu pluginów przy
 starcie.
 
 Skrypt co 15 minut przypomina graczom o komendach salda, płatności, prac i
-sklepu (`/shop`). Dodatkowo co 10 minut pokazuje wszystkim graczom krótką
-wiadomość na actionbarze: `Sklep serwerowy: /shop`.
+sklepu (`/shop`) oraz płatnym teleportowaniu. Gracz wysyła prośbę przez
+`/tpa100 <nick>`; adresat akceptuje ją komendą `/tp100accept` albo odrzuca
+`/tp100deny`. Po akceptacji pobierane jest 100$ z konta proszącego i zostaje
+on teleportowany do adresata. Prośba wygasa po 2 minutach. Dodatkowo co 10
+minut wszystkim graczom wyświetla się krótka wiadomość na actionbarze:
+`Sklep serwerowy: /shop`.
+Nowi gracze są przy pierwszym wejściu automatycznie dołączani do wszystkich
+18 prac VJobs. Aby to zadziałało, grupa `default` musi mieć uprawnienia:
+
+```text
+lp group default permission set jobs.limit.18 true
+lp group default permission set jobs.cooldown.instant true
+```
+
+Każdy może dzięki temu zarabiać i zdobywać poziomy we wszystkich pracach.
+Automatyczne dołączanie dotyczy nowych graczy; obecnych graczy trzeba dodać
+ręcznie komendami `/vjobs join <praca>`.
 Panel SimpleScore pokazuje saldo przez placeholder Vault. Po pierwszym
 uruchomieniu PlaceholderAPI wpisz w konsoli serwera Cloud66 (nie w terminalu
 systemowym kontenera):
