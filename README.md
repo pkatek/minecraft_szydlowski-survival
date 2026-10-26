@@ -19,6 +19,11 @@ serwera — nie podłączaj go do innych kontenerów jednocześnie.
 
 ## Cloud66
 
+Repozytorium zawiera `Dockerfile`, którego wymaga Cloud66 do zbudowania obrazu.
+To cienka warstwa na oficjalnym obrazie serwera Minecraft — ustawienia serwera,
+pluginy, port i trwałe dane konfiguruj w usłudze Cloud66 zgodnie z `compose.yaml`.
+Nie kopiuj świata ani sekretów do obrazu; `/data` ma być trwałym wolumenem.
+
 Przed pierwszym wdrożeniem utwórz wolumen Docker na tym samym hoście, na którym
 będzie uruchomiony serwer:
 
