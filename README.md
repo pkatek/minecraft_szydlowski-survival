@@ -229,7 +229,7 @@ GriefPrevention, korzystając z ekonomii EssentialsX przez VaultUnlocked.
 
 Cena jest ustawiana przed startem Paper przez `scripts/configure-claims.sh`.
 Skrypt zmienia wyłącznie `GriefPrevention.Economy.ClaimBlocksPurchaseCost`
-w `/data/plugins/GriefPrevention/config.yml` za pomocą narzędzia obrazu
+w `/data/plugins/GriefPreventionData/config.yml` za pomocą narzędzia obrazu
 `mc-image-helper`. Działa także na istniejącym wolumenie i zachowuje pozostałe
 wartości konfiguracji. Przed pierwszą zmianą istniejącego pliku tworzy kopię
 `config.yml.before-claim-shop`. Formatowanie i komentarze YAML mogą się zmienić.
@@ -254,7 +254,33 @@ uwzględnij w nim wywołanie `/opt/minecraft/configure-claims.sh`.
 Po wdrożeniu sprawdź `/bal`, `/claimslist` i zakup jednego bloku zwykłym graczem:
 saldo powinno zmniejszyć się o 10$, a pula wzrosnąć o 1.
 
+Wersja GriefPrevention 16.18.7 używa katalogu `GriefPreventionData`, nie
+`GriefPrevention`. Wcześniejsza wersja skryptu zapisywała cenę w błędnym
+katalogu. Po wdrożeniu poprawki istniejące claimy i dane graczy pozostają
+na miejscu; skrypt aktualizuje właściwy plik i odczytuje cenę ponownie,
+a w logu `[claims]` podaje jej wartość oraz pełną ścieżkę.
+Plik utworzony wcześniej w `plugins/GriefPrevention/config.yml` jest ignorowany
+przez tę wersję pluginu; nie kopiuj go w miejsce pełnej konfiguracji.
+
+Jeżeli kupowanie nadal jest wyłączone, sprawdź cenę w
+`plugins/GriefPreventionData/config.yml` oraz log pluginu. Wiersz
+`Hooked into economy: ... Ready to buy/sell claim blocks!` potwierdza połączenie
+z ekonomią. Komunikaty o braku Vault lub obsługiwanego pluginu ekonomii
+wskazują na problem integracji, nawet jeśli sama cena jest już poprawna.
+
+Test konfiguracji bez uruchamiania Paper (po zbudowaniu obrazu):
+
+```sh
+docker run --rm --entrypoint sh \
+  --mount "type=bind,src=$PWD,dst=/workspace,readonly" \
+  szydlowski-survival:local /workspace/tests/test-configure-claims.sh
+```
+
+Test używa tymczasowego katalogu i rzeczywistego `mc-image-helper` z obrazu;
+nie podłącza produkcyjnego wolumenu świata.
+
 Źródła: [ekonomia GriefPrevention](https://docs.griefprevention.com/configuration/#economy-integration),
+[ścieżka konfiguracji w 16.18.7](https://github.com/GriefPrevention/GriefPrevention/blob/16.18.7/src/main/java/me/ryanhamshire/GriefPrevention/DataStore.java),
 [modyfikacja konfiguracji w obrazie](https://docker-minecraft-server.readthedocs.io/en/latest/configuration/interpolating/#patching-existing-files).
 
 Pluginy i świat są przechowywane w trwałym wolumenie `/data`. Przed aktualizacją
