@@ -1,0 +1,5 @@
+on damage of player:
+    attacker is a player
+    if victim's helmet is air or victim's chestplate is air or victim's leggings are air or victim's boots are air:
+        cancel event
+        send "&cPvP jest dostępne dopiero, gdy gracz ma pełną zbroję." to attacker
