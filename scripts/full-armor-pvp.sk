@@ -16,6 +16,15 @@ on first join:
     else:
         send "&cNie można automatycznie dołączyć do prac. Poproś administratora o sprawdzenie uprawnień VJobs." to {_newPlayer}
 
+# Observe cancellation, including teleports blocked by other plugins.
+# Metadata exists only during the synchronous paid teleport below.
+on any player teleport with priority monitor:
+    if metadata value "szydlowski.tpa.check" of player is true:
+        if event is cancelled:
+            set metadata value "szydlowski.tpa.success" of player to false
+        else:
+            set metadata value "szydlowski.tpa.success" of player to true
+
 command /tpa100 <player>:
     executable by: players
     trigger:
@@ -23,12 +32,20 @@ command /tpa100 <player>:
         if {_target} is player:
             send "&cNie możesz wysłać prośby teleportacji do siebie." to player
             stop
+        set {_targetKey} to "%uuid of {_target}%"
+        if {szydlowski.tpa.requester::%{_targetKey}%} is set:
+            if difference between now and {szydlowski.tpa.created::%{_targetKey}%} is less than 2 minutes:
+                send "&cTen gracz ma już oczekującą prośbę teleportacji. Spróbuj później." to player
+                stop
+            delete {szydlowski.tpa.requester::%{_targetKey}%}
+            delete {szydlowski.tpa.requestId::%{_targetKey}%}
+            delete {szydlowski.tpa.created::%{_targetKey}%}
         add 1 to {szydlowski.tpa.sequence}
         set {_requestId} to {szydlowski.tpa.sequence}
         set {szydlowski.tpa.requester::%uuid of {_target}%} to player
         set {szydlowski.tpa.requestId::%uuid of {_target}%} to {_requestId}
         set {szydlowski.tpa.created::%uuid of {_target}%} to now
-        send "&aWysłano prośbę do &e%name of {_target}%&a. Teleport kosztuje 100$ i opłata będzie pobrana tylko po akceptacji." to player
+        send "&aWysłano prośbę do &e%name of {_target}%&a. Teleport kosztuje 100$ i opłata będzie pobrana dopiero po udanym teleporcie." to player
         send "&e%name of player% &7prosi o teleport do Ciebie za &6100$&7. Wpisz &a/tp100accept &7lub &c/tp100deny&7." to {_target}
         wait 2 minutes
         if {szydlowski.tpa.requestId::%uuid of {_target}%} is {_requestId}:
@@ -62,13 +79,30 @@ command /tp100accept:
             send "&c%name of {_requester}% nie ma wystarczających środków (100$)." to player
             send "&cNie masz wystarczających środków na teleport (100$)." to {_requester}
             stop
-        remove 100 from {_requester}'s balance
-        teleport {_requester} to player
-        send "&aTeleportowano Cię do &e%name of player%&a. Pobrano 100$." to {_requester}
-        send "&a%name of {_requester}% teleportował się do Ciebie; pobrano 100$." to player
+        # Consume the request before invoking other plugins through teleport.
         delete {szydlowski.tpa.requester::%{_requestKey}%}
         delete {szydlowski.tpa.requestId::%{_requestKey}%}
         delete {szydlowski.tpa.created::%{_requestKey}%}
+        set {_destination} to location of player
+        set metadata value "szydlowski.tpa.check" of {_requester} to true
+        set metadata value "szydlowski.tpa.success" of {_requester} to false
+        # Force makes this synchronous; it does not bypass event cancellation.
+        # The destination chunk is already loaded by the receiving player.
+        force teleport {_requester} to {_destination}
+        set {_completed} to metadata value "szydlowski.tpa.success" of {_requester}
+        delete metadata value "szydlowski.tpa.check" of {_requester}
+        delete metadata value "szydlowski.tpa.success" of {_requester}
+        if world of {_requester} is not world of {_destination}:
+            set {_completed} to false
+        else if distance between location of {_requester} and {_destination} is greater than 0.1:
+            set {_completed} to false
+        if {_completed} is not true:
+            send "&cTeleport nie powiódł się. Nie pobrano pieniędzy; wyślij nową prośbę." to {_requester}
+            send "&cTeleport nie powiódł się. Nie pobrano opłaty." to player
+            stop
+        remove 100 from {_requester}'s balance
+        send "&aTeleportowano Cię do &e%name of player%&a. Pobrano 100$." to {_requester}
+        send "&a%name of {_requester}% teleportował się do Ciebie; pobrano 100$." to player
 
 command /tp100deny:
     executable by: players

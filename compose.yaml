@@ -1,8 +1,15 @@
 services:
   minecraft:
-    image: itzg/minecraft-server:java25
+    build: .
+    image: szydlowski-survival:local
     container_name: szydlowski-survival
     restart: unless-stopped
+    stop_grace_period: 2m
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "5"
     ports:
       - "25565:25565"
     environment:
@@ -10,6 +17,7 @@ services:
       TYPE: PAPER
       VERSION: ${MINECRAFT_VERSION:-26.1.2}
       MEMORY: ${MEMORY:-4G}
+      INIT_MEMORY: ${INIT_MEMORY:-1G}
       MODE: survival
       DIFFICULTY: normal
       MOTD: "Szydłowski Survival | Survival z ekonomią i handlem"
